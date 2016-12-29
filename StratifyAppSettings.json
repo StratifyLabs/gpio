@@ -1,0 +1,17 @@
+{
+    "LocalBuild": "build_release_armv7m",
+    "LocalInstallPath": "/app/.install",
+    "LocalIsRam": false,
+    "LocalIsStartup": false,
+    "LocalProjectId": "",
+    "buildprefix": "build_",
+    "description": "gpio is a utility that allows you to read, write and configure GPIO pins from the command line.",
+    "github": "https://github.com/StratifyLabs/gpio",
+    "hardwareid": "",
+    "name": "gpio",
+    "publisher": "Stratify Labs, Inc",
+    "ram": 8192,
+    "tags": "demo",
+    "type": "StratifyApp",
+    "version": "0.1"
+}
