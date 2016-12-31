@@ -29,6 +29,7 @@ int main(int argc, char * argv[]){
 	operation = cli.at(1).c_str();
 
 	if( operation == "readall" ){
+		printf("%s readall\n\n", cli.name());
 		print_all();
 	} else if ( operation == "read" ){
 
@@ -109,9 +110,39 @@ int main(int argc, char * argv[]){
 
 
 void print_all(){
+	int port_num = 0;
+	int pin;
+	u32 value;
 	//show the status of all the pins
-	printf("SHOW ALL PINS\n");
+	printf("     28   24   20   16   12    8    4    0\n");
+	printf("  ----------------------------------------\n");
+	do {
+		Pio p(port_num);
 
+		if( (p.open() < 0) || (port_num > 10) ){
+			break;
+		}
+
+		printf("P%d|", port_num);
+		for(pin = 0; pin < 32; pin++){
+			value = p.value();
+			if( value & (1<<(31-pin)) ){
+				printf("1");
+			} else {
+				printf("0");
+			}
+
+			if( (pin+1) % 4 == 0 ){
+				printf(" ");
+			}
+		}
+		printf("\n");
+
+		port_num++;
+
+	} while(1);
+
+	printf("\n");
 
 }
 
