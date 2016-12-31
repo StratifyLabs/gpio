@@ -11,7 +11,7 @@
     "name": "gpio",
     "publisher": "Stratify Labs, Inc",
     "ram": 8192,
-    "tags": "demo",
+    "tags": "utility",
     "type": "StratifyApp",
-    "version": "0.2"
+    "version": "1.0"
 }

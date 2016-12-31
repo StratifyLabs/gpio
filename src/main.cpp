@@ -21,7 +21,7 @@ int main(int argc, char * argv[]){
 		exit(0);
 	}
 
-	if( cli.is_option("--help") ){
+	if( cli.is_option("--help") || cli.is_option("-h") ){
 		show_usage();
 		exit(0);
 	}
@@ -148,5 +148,10 @@ void print_all(){
 
 void show_usage(){
 	printf("Usage:\n");
+	printf("\tgpio [readall|mode|read|write]\n");
+	printf("\tgpio readall\n");
+	printf("\tgpio mode [X.Y] [in|out|up|down]\n");
+	printf("\tgpio write [X.Y] [1|0]\n");
+	printf("\tgpio read [X.Y]\n");
 	exit(0);
 }
