@@ -3,7 +3,7 @@
     "LocalInstallPath": "/app/.install",
     "LocalIsRam": false,
     "LocalIsStartup": false,
-    "LocalProjectId": "",
+    "LocalProjectId": "-K_LX5Q_MngdvyQ6XlID",
     "buildprefix": "build_",
     "description": "gpio is a utility that allows you to read, write and configure GPIO pins from the command line.",
     "github": "https://github.com/StratifyLabs/gpio",
