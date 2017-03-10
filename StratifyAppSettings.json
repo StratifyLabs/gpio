@@ -9,6 +9,7 @@
     "github": "https://github.com/StratifyLabs/gpio",
     "hardwareid": "",
     "name": "gpio",
+    "permissions": "public",
     "publisher": "Stratify Labs, Inc",
     "ram": 8192,
     "tags": "utility",
