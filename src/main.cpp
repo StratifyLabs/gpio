@@ -1,25 +1,20 @@
 #include <stdio.h>
 
-#include <stfy/sys.hpp>
-#include <stfy/hal.hpp>
-#include <stfy/var.hpp>
+#include <sapi/sys.hpp>
+#include <sapi/hal.hpp>
+#include <sapi/var.hpp>
 
 
 static void print_all();
 static void show_usage();
-
 
 int main(int argc, char * argv[]){
 	String operation;
 
 	Cli cli(argc, argv);
 	cli.set_publisher("Stratify Labs, Inc");
-	cli.set_version("1.0");
+	cli.handle_version();
 
-	if( cli.is_option("--version") || cli.is_option("-v") ){
-		cli.print_version();
-		exit(0);
-	}
 
 	if( cli.is_option("--help") || cli.is_option("-h") ){
 		show_usage();
@@ -33,21 +28,21 @@ int main(int argc, char * argv[]){
 		print_all();
 	} else if ( operation == "read" ){
 
-		pio_t pio = cli.pio_at(2);
+		mcu_pin_t pio = cli.pin_at(2);
 
 		if( pio.port != 255 ){
 			Pin p(pio.port, pio.pin);
 			if( p.open(Pin::RDWR) < 0 ){
 				printf("Failed to open /dev/pio%d\n", pio.port);
 			} else {
-				printf("%d.%d == %d\n", pio.port, pio.pin, p.value());
+				printf("%d.%d == %d\n", pio.port, pio.pin, p.get_value());
 				p.close();
 			}
 		} else {
 			show_usage();
 		}
 	} else if ( operation == "write" ){
-		pio_t pio = cli.pio_at(2);
+		mcu_pin_t pio = cli.pin_at(2);
 		int value = cli.value_at(3);
 
 		if( pio.port != 255 ){
@@ -74,7 +69,7 @@ int main(int argc, char * argv[]){
 			show_usage();
 		} else {
 
-			pio_t pio = cli.pio_at(2);
+			mcu_pin_t pio = cli.pin_at(2);
 			String mode = cli.at(3);
 
 			if( pio.port == 255 ){
@@ -87,23 +82,49 @@ int main(int argc, char * argv[]){
 
 
 					if( (mode == "in") || (mode == "float") || (mode == "tri") ){
-						p.set_attr(Pin::INPUT | Pin::FLOAT);
+						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_FLOAT);
 						printf("%d.%d -> in\n", pio.port, pio.pin);
 					} else if ( mode == "out" ){
-						p.set_attr(Pin::OUTPUT);
+						p.set_attr(Pin::FLAG_SET_OUTPUT);
 						printf("%d.%d -> out\n", pio.port, pio.pin);
 					} else if ( (mode == "up") || (mode == "pullup") ){
-						p.set_attr(Pin::INPUT | Pin::PULLUP);
+						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLUP);
 						printf("%d.%d -> pullup\n", pio.port, pio.pin);
 					} else if ( (mode == "down") || (mode == "pulldown") ){
-						p.set_attr(Pin::INPUT | Pin::PULLDOWN);
+						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLDOWN);
 						printf("%d.%d -> pulldown\n", pio.port, pio.pin);
 					}
 				}
 			}
 		}
-	}
+	} else if ( operation == "pulse" ){
+		if( (cli.size() != 5) ){
+			show_usage();
+		} else {
+			mcu_pin_t pio = cli.pin_at(2);
+			int value = cli.value_at(3);
+			int t = cli.value_at(4);
 
+			if( value != 0 ){
+				value = 1;
+			}
+
+			if( pio.port == 0xff ){
+				show_usage();
+			} else {
+				Pin p(pio.port, pio.pin);
+				if( p.open(Pin::READWRITE) < 0 ){
+					printf("Failed to open /dev/pio%d", pio.port);
+				} else {
+					//go high then low
+					printf("%d.%d -> %d (%dusec) -> %d\n", pio.port, pio.pin, value, t, !value);
+					p = (value != 0);
+					Timer::wait_usec(t);
+					p = (value == 0);
+				}
+			}
+		}
+	}
 
 	return 0;
 }
@@ -125,7 +146,7 @@ void print_all(){
 
 		printf("P%d|", port_num);
 		for(pin = 0; pin < 32; pin++){
-			value = p.value();
+			value = p.get_value();
 			if( value & (1<<(31-pin)) ){
 				printf("1");
 			} else {
@@ -148,10 +169,11 @@ void print_all(){
 
 void show_usage(){
 	printf("Usage:\n");
-	printf("\tgpio [readall|mode|read|write]\n");
+	printf("\tgpio readall|mode|read|write\n");
 	printf("\tgpio readall\n");
-	printf("\tgpio mode [X.Y] [in|out|up|down]\n");
-	printf("\tgpio write [X.Y] [1|0]\n");
-	printf("\tgpio read [X.Y]\n");
+	printf("\tgpio mode X.Y in|out|up|down\n");
+	printf("\tgpio write X.Y 1|0\n");
+	printf("\tgpio read X.Y\n");
+	printf("\tgpio pulse X.Y 1|0 usec\n");
 	exit(0);
 }
