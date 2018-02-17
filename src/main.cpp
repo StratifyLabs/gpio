@@ -24,7 +24,7 @@ int main(int argc, char * argv[]){
 	operation = cli.at(1).c_str();
 
 	if( operation == "readall" ){
-		printf("%s readall\n\n", cli.name());
+        printf("%s:\n", cli.name());
 		print_all();
 	} else if ( operation == "read" ){
 
@@ -35,7 +35,7 @@ int main(int argc, char * argv[]){
 			if( p.open(Pin::RDWR) < 0 ){
 				printf("Failed to open /dev/pio%d\n", pio.port);
 			} else {
-				printf("%d.%d == %d\n", pio.port, pio.pin, p.get_value());
+                printf("%s:%d.%d == %d\n", cli.name(), pio.port, pio.pin, p.get_value());
 				p.close();
 			}
 		} else {
@@ -56,7 +56,7 @@ int main(int argc, char * argv[]){
 					value = 1;
 					p.set();
 				}
-				printf("%d.%d -> %d\n", pio.port, pio.pin, value);
+                printf("%s:%d.%d -> %d\n", cli.name(), pio.port, pio.pin, value);
 				p.close();
 			}
 		} else {
@@ -83,16 +83,16 @@ int main(int argc, char * argv[]){
 
 					if( (mode == "in") || (mode == "float") || (mode == "tri") ){
 						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_FLOAT);
-						printf("%d.%d -> in\n", pio.port, pio.pin);
+                        printf("%s:%d.%d -> in\n", cli.name(), pio.port, pio.pin);
 					} else if ( mode == "out" ){
 						p.set_attr(Pin::FLAG_SET_OUTPUT);
-						printf("%d.%d -> out\n", pio.port, pio.pin);
+                        printf("%s:%d.%d -> out\n", cli.name(), pio.port, pio.pin);
 					} else if ( (mode == "up") || (mode == "pullup") ){
 						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLUP);
-						printf("%d.%d -> pullup\n", pio.port, pio.pin);
+                        printf("%s:%d.%d -> pullup\n", cli.name(), pio.port, pio.pin);
 					} else if ( (mode == "down") || (mode == "pulldown") ){
 						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLDOWN);
-						printf("%d.%d -> pulldown\n", pio.port, pio.pin);
+                        printf("%s:%d.%d -> pulldown\n", cli.name(), pio.port, pio.pin);
 					}
 				}
 			}
@@ -117,14 +117,16 @@ int main(int argc, char * argv[]){
 					printf("Failed to open /dev/pio%d", pio.port);
 				} else {
 					//go high then low
-					printf("%d.%d -> %d (%dusec) -> %d\n", pio.port, pio.pin, value, t, !value);
+                    printf("%s:%d.%d -> %d (%dusec) -> %d\n", cli.name(), pio.port, pio.pin, value, t, !value);
 					p = (value != 0);
 					Timer::wait_usec(t);
 					p = (value == 0);
 				}
 			}
 		}
-	}
+    } else {
+        show_usage();
+    }
 
 	return 0;
 }
@@ -135,8 +137,8 @@ void print_all(){
 	int pin;
 	u32 value;
 	//show the status of all the pins
-	printf("     28   24   20   16   12    8    4    0\n");
-	printf("  ----------------------------------------\n");
+    printf("       28   24   20   16   12    8    4    0\n");
+    printf("     ---- ---- ---- ---- ---- ---- ---- ----\n");
 	do {
 		Pio p(port_num);
 
@@ -144,7 +146,7 @@ void print_all(){
 			break;
 		}
 
-		printf("P%d|", port_num);
+        printf("P%d | ", port_num);
 		for(pin = 0; pin < 32; pin++){
 			value = p.get_value();
 			if( value & (1<<(31-pin)) ){

@@ -1,0 +1,25 @@
+{
+    "buildprefix": "build_",
+    "change": "Show usage when no valid command is detected. Better formatting.",
+    "changes": {
+        "-L5_mC5_y-fvdDhno1zc": {
+            "description": "",
+            "version": "1.4"
+        },
+        "-L5_rJvi2IUGhKEGUnAc": {
+            "description": "Show usage when no valid command is detected. Better formatting.",
+            "version": "1.5"
+        }
+    },
+    "description": "gpio is a utility that allows you to read, write and configure GPIO pins from the command line.",
+    "github": "https://github.com/StratifyLabs/gpio",
+    "hardwareid": "",
+    "name": "gpio",
+    "permissions": "public",
+    "publisher": "Stratify Labs, Inc",
+    "ram": 8192,
+    "tags": "utility",
+    "type": "StratifyApp",
+    "uid": "QSW7bQHeDqhJEcZ0mxQ5SmEYUSL2",
+    "version": "1.5"
+}
