@@ -1,6 +1,6 @@
 {
     "buildprefix": "build_",
-    "change": "Show usage when no valid command is detected. Better formatting.",
+    "change": "Added support for Cortex M7",
     "changes": {
         "-L5_mC5_y-fvdDhno1zc": {
             "description": "",
@@ -9,6 +9,14 @@
         "-L5_rJvi2IUGhKEGUnAc": {
             "description": "Show usage when no valid command is detected. Better formatting.",
             "version": "1.5"
+        },
+        "-L7AVQeff677sbf8ilMG": {
+            "description": "Updated for new build architectures",
+            "version": "1.6"
+        },
+        "-L9fSYQ3DS9_PwGLvZyz": {
+            "description": "Added support for Cortex M7",
+            "version": "1.7"
         }
     },
     "description": "gpio is a utility that allows you to read, write and configure GPIO pins from the command line.",
@@ -21,5 +29,5 @@
     "tags": "utility",
     "type": "StratifyApp",
     "uid": "QSW7bQHeDqhJEcZ0mxQ5SmEYUSL2",
-    "version": "1.5"
+    "version": "1.7"
 }

@@ -15,7 +15,6 @@ int main(int argc, char * argv[]){
 	cli.set_publisher("Stratify Labs, Inc");
 	cli.handle_version();
 
-
 	if( cli.is_option("--help") || cli.is_option("-h") ){
 		show_usage();
 		exit(0);
@@ -24,7 +23,7 @@ int main(int argc, char * argv[]){
 	operation = cli.at(1).c_str();
 
 	if( operation == "readall" ){
-        printf("%s:\n", cli.name());
+		  printf("%s:\n", cli.name().cstring());
 		print_all();
 	} else if ( operation == "read" ){
 
@@ -35,7 +34,7 @@ int main(int argc, char * argv[]){
 			if( p.open(Pin::RDWR) < 0 ){
 				printf("Failed to open /dev/pio%d\n", pio.port);
 			} else {
-                printf("%s:%d.%d == %d\n", cli.name(), pio.port, pio.pin, p.get_value());
+					 printf("%s:%d.%d == %d\n", cli.name().cstring(), pio.port, pio.pin, p.get_value());
 				p.close();
 			}
 		} else {
@@ -56,7 +55,7 @@ int main(int argc, char * argv[]){
 					value = 1;
 					p.set();
 				}
-                printf("%s:%d.%d -> %d\n", cli.name(), pio.port, pio.pin, value);
+					 printf("%s:%d.%d -> %d\n", cli.name().cstring(), pio.port, pio.pin, value);
 				p.close();
 			}
 		} else {
@@ -82,17 +81,17 @@ int main(int argc, char * argv[]){
 
 
 					if( (mode == "in") || (mode == "float") || (mode == "tri") ){
-						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_FLOAT);
-                        printf("%s:%d.%d -> in\n", cli.name(), pio.port, pio.pin);
+						p.set_attributes(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_FLOAT);
+								printf("%s:%d.%d -> in\n", cli.name().cstring(), pio.port, pio.pin);
 					} else if ( mode == "out" ){
-						p.set_attr(Pin::FLAG_SET_OUTPUT);
-                        printf("%s:%d.%d -> out\n", cli.name(), pio.port, pio.pin);
+						p.set_attributes(Pin::FLAG_SET_OUTPUT);
+								printf("%s:%d.%d -> out\n", cli.name().cstring(), pio.port, pio.pin);
 					} else if ( (mode == "up") || (mode == "pullup") ){
-						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLUP);
-                        printf("%s:%d.%d -> pullup\n", cli.name(), pio.port, pio.pin);
+						p.set_attributes(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLUP);
+								printf("%s:%d.%d -> pullup\n", cli.name().cstring(), pio.port, pio.pin);
 					} else if ( (mode == "down") || (mode == "pulldown") ){
-						p.set_attr(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLDOWN);
-                        printf("%s:%d.%d -> pulldown\n", cli.name(), pio.port, pio.pin);
+						p.set_attributes(Pin::FLAG_SET_INPUT | Pin::FLAG_IS_PULLDOWN);
+								printf("%s:%d.%d -> pulldown\n", cli.name().cstring(), pio.port, pio.pin);
 					}
 				}
 			}
@@ -117,7 +116,7 @@ int main(int argc, char * argv[]){
 					printf("Failed to open /dev/pio%d", pio.port);
 				} else {
 					//go high then low
-                    printf("%s:%d.%d -> %d (%dusec) -> %d\n", cli.name(), pio.port, pio.pin, value, t, !value);
+						  printf("%s:%d.%d -> %d (%dusec) -> %d\n", cli.name().cstring(), pio.port, pio.pin, value, t, !value);
 					p = (value != 0);
 					Timer::wait_usec(t);
 					p = (value == 0);
